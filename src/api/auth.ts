@@ -45,10 +45,9 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/getUser', fetchUser, async (req, res) => {
+router.post('/getUser', fetchUser, async (req: any, res) => {
   try {
     const userId = req.user.id;
-    console.log(userId);
     const user = await prisma.user.findFirst({
       where: {
         id: parseInt(userId),
