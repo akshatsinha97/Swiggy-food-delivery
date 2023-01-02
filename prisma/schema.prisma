@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  firstname String  @db.VarChar(50)
+  lastname  String? @db.VarChar(50)
+  password  String  @db.VarChar(100)
+  roles     Role
+  Cart      Cart?
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @unique @db.VarChar(30)
+  Food Food[]
+}
+
+model Food {
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(30)
+  description String?   @db.VarChar(255)
+  price       Float
+  image       String    @db.VarChar(255)
+  category    Category  @relation(fields: [categoryid], references: [id], onDelete: Cascade)
+  categoryid  Int
+  cartItem    CartItem?
+}
+
+model Cart {
+  id       Int @id @default(autoincrement())
+  quantity Int
+
+  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   Int        @unique
+  CartItem CartItem[]
+}
+
+model CartItem {
+  id       Int  @id @default(autoincrement())
+  quantity Int
+  food     Food @relation(fields: [foodId], references: [id])
+  foodId   Int  @unique
+  cart     Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cartId   Int
+}
