@@ -38,6 +38,8 @@ router.post('/login', async (req, res) => {
       },
     };
     const authtoken = jwt.sign(payload, jwt_secret);
+    // Generate the JWT auth token and redirect
+    // window.localStorage.setItem('token', authtoken);
     res.json({ authtoken });
   } catch (error: any) {
     console.error(error.message);
