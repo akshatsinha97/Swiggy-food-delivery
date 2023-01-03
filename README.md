@@ -28,25 +28,21 @@ UnAuthorized Requests:
 
 USERS:
 ______________________________________________________________________________
-GET /users/						
+GET /users/getUser/		
 
-// Gets information of all users inside database.
-
-GET /users/getUser/:id			
-
-// Gets information about a specific user.
+// Gets information about a specific logged in user.
 
 POST /users/createUser			
 
 // Creates user post verifying if the all the mandatory fields like firstname,  unique email & password are filled up.
 
-PUT /users/updateUser/:id		
+PUT /users/updateUser/	
 
-// Updates user details like firstname & lastname.
+// Updates user details like firstname & lastname for the logged in user.
 
-DELETE /users/deleteUser/:id	
+DELETE /users/deleteUser/
 
-// Deletes a specific user with specified id in request params.
+// Deletes a specific logged in user.
 
 FOODS:
 ______________________________________________________________________________
@@ -73,6 +69,20 @@ GET /categories/getCategory/:id
 // Gets a specific category.
 
 Authorized Requests:
+
+USERS:
+_______________________________________________________________________________
+GET /users/						
+
+// Gets information of all users inside database and requires logged in admin level priviledges.
+
+GET /users/getUser/:id	
+
+// Gets information about a specific logged in user.
+
+DELETE /users/deleteUser/:id
+
+// Deletes a specific logged in user.
 
 FOODS:
 _______________________________________________________________________________
