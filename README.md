@@ -29,9 +29,11 @@ UnAuthorized Requests:
 USERS:
 ______________________________________________________________________________
 GET /users/						
+
 // Gets information of all users inside database.
 
 GET /users/getUser/:id			
+
 // Gets information about a specific user.
 
 POST /users/createUser			
