@@ -1,20 +1,24 @@
 import express from 'express';
 import prisma from '../instance/prisma-instance';
 import bodyParser from 'body-parser';
+import fetchUser from '../middleware/fetchUser';
 
 const router = express.Router();
 router.use(bodyParser.json());
 
-router.get('/:userid', async (req, res) => {
+router.get('/', fetchUser, async (req: any, res) => {
+  const userId = req.user.id;
   const cart = await prisma.cart.findMany({
     where: {
-      userId: parseInt(req.params.userid),
+      userId: parseInt(userId),
     },
   });
   res.send(cart);
 });
 
-router.post('/:userid/addItem/:foodid', async (req, res) => {
+router.post('/addItem/:foodid', fetchUser, async (req: any, res) => {
+  const userId = req.user.id;
+
   const food = await prisma.food.findFirst({
     where: {
       id: parseInt(req.params.foodid),
@@ -22,7 +26,7 @@ router.post('/:userid/addItem/:foodid', async (req, res) => {
   });
   const cart = await prisma.cart.findFirst({
     where: {
-      userId: parseInt(req.params.userid),
+      userId: parseInt(userId),
     },
   });
   const cartItem = await prisma.cartItem.create({
@@ -34,7 +38,7 @@ router.post('/:userid/addItem/:foodid', async (req, res) => {
   });
   await prisma.cart.update({
     where: {
-      userId: parseInt(req.params.userid),
+      userId: parseInt(userId),
     },
     data: {
       quantity: (cart?.quantity || 0) + cartItem.quantity,
@@ -50,7 +54,8 @@ router.post('/:userid/addItem/:foodid', async (req, res) => {
   );
 });
 
-router.patch('/:userid/deleteItem/:foodid', async (req, res) => {
+router.patch('/deleteItem/:foodid', fetchUser, async (req: any, res) => {
+  const userId = req.user.id;
   const food = await prisma.food.findFirst({
     where: {
       id: parseInt(req.params.foodid),
@@ -63,7 +68,7 @@ router.patch('/:userid/deleteItem/:foodid', async (req, res) => {
   });
   await prisma.cart.update({
     where: {
-      userId: parseInt(req.params.userid),
+      userId: parseInt(userId),
     },
     data: {
       CartItem: {

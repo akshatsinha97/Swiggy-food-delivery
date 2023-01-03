@@ -60,7 +60,7 @@ router.post('/createFood', fetchUser, async (req: any, res) => {
   }
 });
 
-router.patch('/updateFood/:id', fetchUser, async (req: any, res) => {
+router.put('/updateFood/:id', fetchUser, async (req: any, res) => {
   const userId = req.user.id;
   const user = await prisma.user.findFirst({
     where: {

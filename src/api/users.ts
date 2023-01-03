@@ -2,27 +2,52 @@ import express from 'express';
 import prisma from '../instance/prisma-instance';
 import bodyParser from 'body-parser';
 import bcrypt from 'bcrypt';
+import fetchUser from '../middleware/fetchUser';
 
 const router = express.Router();
 
 router.use(bodyParser.json());
 
-router.get('/', async (_, res) => {
-  const users = await prisma.user.findMany();
-  res.send(users);
-});
-
-router.get('/getUser/:id', async (req, res) => {
+router.get('/', fetchUser, async (req: any, res) => {
+  const userId = req.user.id;
   const user = await prisma.user.findFirst({
     where: {
-      id: parseInt(req.params.id),
+      id: parseInt(userId),
     },
   });
-  if (user == null) {
-    res.send(`User with id: ${req.params.id} does not exist.`);
+  if (user?.roles == 'ADMIN') {
+    const users = await prisma.user.findMany();
+    res.send(users);
+  } else {
+    res.send(
+      'This request needs Admin level priviledges. Please try logging in with admin credentials.'
+    );
   }
-  console.log(user);
-  res.send(user);
+});
+
+router.get('/getUser/:id', fetchUser, async (req: any, res) => {
+  const userId = req.user.id;
+  const user = await prisma.user.findFirst({
+    where: {
+      id: parseInt(userId),
+    },
+  });
+  if (user?.roles == 'ADMIN' || user?.id == userId) {
+    const user = await prisma.user.findFirst({
+      where: {
+        id: parseInt(req.params.id),
+      },
+    });
+    if (user == null) {
+      res.send(`User with id: ${req.params.id} does not exist.`);
+    }
+    console.log(user);
+    res.send(user);
+  } else {
+    res.send(
+      'Request not allowed. Please sign in with your user account or admin account.'
+    );
+  }
 });
 
 router.post('/createUser', async (req, res) => {
@@ -59,49 +84,71 @@ router.post('/createUser', async (req, res) => {
   }
 });
 
-router.put('/updateUser/:id', async (req, res) => {
-  if (req.body.firstname) {
-    const updateUser = await prisma.user.update({
-      where: {
-        id: parseInt(req.params.id),
-      },
-      data: {
-        firstname: req.body.firstname,
-      },
-    });
-    console.log(updateUser);
-  }
-  if (req.body.lastname) {
-    const updateUser = await prisma.user.update({
-      where: {
-        id: parseInt(req.params.id),
-      },
-      data: {
-        lastname: req.body.lastname,
-      },
-    });
-    console.log(updateUser);
-  }
-  res.send(`User with id: ${req.params.id} has been updated successfully!`);
-});
-
-router.delete('/deleteUser/:id', async (req, res) => {
-  const deleteUser = await prisma.user.findFirst({
+router.put('/updateUser/', fetchUser, async (req: any, res) => {
+  const userId = req.user.id;
+  const user = await prisma.user.findFirst({
     where: {
-      id: parseInt(req.params.id),
+      id: parseInt(userId),
     },
   });
-  if (deleteUser == null) {
-    res.send(`User with id: ${req.params.id} does not exist.`);
+  if (user?.id == userId) {
+    if (req.body.firstname) {
+      const updateUser = await prisma.user.update({
+        where: {
+          id: parseInt(userId),
+        },
+        data: {
+          firstname: req.body.firstname,
+        },
+      });
+      console.log(updateUser);
+    }
+    if (req.body.lastname) {
+      const updateUser = await prisma.user.update({
+        where: {
+          id: parseInt(userId),
+        },
+        data: {
+          lastname: req.body.lastname,
+        },
+      });
+      console.log(updateUser);
+    }
+    res.send(`User with id: ${userId} has been updated successfully!`);
   } else {
-    await prisma.user.delete({
+    res.send('Request not allowed. Please sign in with your user account.');
+  }
+});
+
+router.delete('/deleteUser/:id', fetchUser, async (req: any, res) => {
+  const userId = req.user.id;
+  const user = await prisma.user.findFirst({
+    where: {
+      id: parseInt(userId),
+    },
+  });
+  if (user?.roles == 'ADMIN' || user?.id == userId) {
+    const deleteUser = await prisma.user.findFirst({
       where: {
         id: parseInt(req.params.id),
       },
     });
-    console.log(deleteUser);
+    if (deleteUser == null) {
+      res.send(`User with id: ${req.params.id} does not exist.`);
+    } else {
+      await prisma.user.delete({
+        where: {
+          id: parseInt(req.params.id),
+        },
+      });
+      console.log(deleteUser);
+      res.send(
+        `User with name: ${deleteUser.firstname} is deleted successfully!`
+      );
+    }
+  } else {
     res.send(
-      `User with name: ${deleteUser.firstname} is deleted successfully!`
+      'Request not allowed. Please sign in with your user account or admin account.'
     );
   }
 });
