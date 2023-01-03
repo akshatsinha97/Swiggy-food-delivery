@@ -12,7 +12,8 @@
     "watch-node": "nodemon dist/src/server.js",
     "migrate": "npx prisma migrate dev",
     "generate": "npx prisma generate",
-    "seed": "npx prisma db seed"
+    "seed": "npx prisma db seed",
+    "start": "node dist/src/server.js"
   },
   "keywords": [],
   "author": "",
