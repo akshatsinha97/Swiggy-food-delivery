@@ -17,7 +17,11 @@ router.get('/getCategory/:id', async (req, res) => {
       id: parseInt(req.params.id),
     },
   });
-  res.send(category);
+  if (category) {
+    res.send(category);
+  } else {
+    res.send(`Category with id: ${req.params.id} not found`);
+  }
 });
 
 router.post('/createCategory', fetchUser, async (req: any, res) => {
