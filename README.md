@@ -17,7 +17,7 @@ ___________________________________________________________________________
 
 ####Technologies Used####
 
-Javascript, NodeJs, ExpressJs, JWT, Bcrypt, Prisma ORM, MySQL database
+Javascript, Typescript, NodeJs, ExpressJs, JWT, Bcrypt, Prisma ORM, MySQL database
 
 ####Usage####
 _____________________________________________________________________________
