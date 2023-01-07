@@ -32,7 +32,7 @@ router.get('/getUser/:id', fetchUser, async (req: any, res) => {
       id: parseInt(userId),
     },
   });
-  if (user?.roles == 'ADMIN' || user?.id == userId) {
+  if (user?.roles == 'ADMIN' || req.params.id == userId) {
     const user = await prisma.user.findFirst({
       where: {
         id: parseInt(req.params.id),

@@ -9,7 +9,14 @@ import auth from './api/auth';
 const app = express();
 const port = process.env.PORT;
 
+// View engine setup
+app.set('view engine', 'ejs');
+
 app.use(bodyParser.json());
+
+app.get('/', (_, res) => {
+  res.render('index.ejs');
+});
 
 app.use('/users', users);
 

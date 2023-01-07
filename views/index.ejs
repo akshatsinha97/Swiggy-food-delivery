@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Instructions</title>
+</head>
+<body>
+    <h1>Swiggy-food-delivery</h1>
+    <hr>
+<h3>
+####Introduction####
+</h3>
+<p>
+This is a food powsing and ordering backend REST API.
+</p>
+<hr>
+<h3>
+####Features####
+</h3>
+<p>
+It consists of multiple food categories to choose from with collection of food items inside each category section.
+
+A user can access more details about a specific food with additional information and food image provided.
+
+It has secure way to authenticate user logins and signups with persistence using Json Web Token mechanism.
+
+User credentials are entirely safe with the use of hashing function inside database and are not stored in plain text.
+</p>
+<hr>
+<h3>
+####Technologies Used####
+</h3>
+<p>
+Javascript, Typescript, NodeJs, ExpressJs, JWT, Bcrypt, Prisma ORM, MySQL database
+</p>
+<hr>
+<h3>
+####Usage####
+</h3>
+<p>
+    <h5>
+REST API Endpoints:
+</h5>
+</p>
+<h5>
+UnAuthorized Requests:
+</h5>
+<p>
+USERS:
+</p>
+<p>
+GET <b>/users/getUser/</b>         <br>// Gets information about a specific logged in user.
+</p>
+<p>
+POST <b>/users/createUser</b>          <br>// Creates user post verifying if the all the mandatory fields like firstname, unique email & password are filled up.
+</p>
+<P>
+PUT <b>/users/updateUser/</b>          <br>// Updates user details like firstname & lastname for the logged in user.
+</P>
+<p>
+DELETE <b>/users/deleteUser/</b>           <br>// Deletes a specific logged in user.
+</p>
+FOODS:
+<p>
+GET <b>/foods/</b>         <br>// Gets information about all food items inside database.
+</p>
+<p>
+GET <b>/foods/getFood/:id</b>          <br>// Gets information about a specific food item.
+</p>
+<p>
+GET <b>/foods/:categoryid</b>          <br>// Gets information about foods of a specific category.
+</p>
+
+CATEGORY:
+<p>
+GET <b>/categories/</b>            <br>// Gets a list of all categories.
+</p>
+<p>
+GET <b>/categories/getCategory/:id</b>         <br>// Gets a specific category.
+</p>
+<h5>
+    <hr>
+Authorized Requests:
+</h5>
+USERS:
+<p>
+GET <b>/users/</b>         <br>// Gets information of all users inside database and requires logged in admin level priviledges.
+</p>
+<p>
+GET <b>/users/getUser/:id</b>          <br>// Gets information about a specific logged in user.
+</p>
+<p>
+DELETE <b>/users/deleteUser/:id</b>            <br>// Deletes a specific logged in user.
+</p>
+FOODS:
+<p>
+POST <b>/foods/createFood</b>          <br>// Creates new food item and requires logged in admin level priviledges.
+</p>
+<p>
+PUT <b>/foods/updateFood/:id</b>           <br>// Updates existing food item and requires logged in admin level priviledges.
+</p>
+<p>
+DELETE <b>/foods/deleteFood/:id</b>            <br>// Deletes existing food item and requires logged in admin level priviledges.
+</p>
+CATEGORY:
+<p>
+POST <b>/categories/createCategory</b>         <br>// Creates new category and requires logged in admin level priviledges.
+</p>
+<p>
+PUT <b>/categories/updateCategory/:id</b>          <br>// Updates existing category and requires logged in admin level priviledges.
+</p>
+<p>
+DELETE <b>/categories/deleteCategory/:id</b>           <br>// Deletes existing category and requires logged in admin level priviledges.
+</p>
+CART:
+<p>
+GET <b>/cart/</b>          <br>// Gets a list of food items added to cart and requires logged in user.
+</p>
+<p>
+POST <b>/cart/addItem/:foodid</b>          <br>// Adds a food item to user specific cart and requires logged in user.
+</p>
+<p>
+PUT <b>/cart/deleteItem/:foodid</b>            <br>// Removes food item from user cart and requires logged in user.
+</p>
+</body>
+</html>
